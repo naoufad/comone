@@ -1,0 +1,64 @@
+{% load i18n %}
+{% load basket_tags %}
+{% load promotion_tags %}
+{% load category_tags %}
+{% load product_tags %}
+
+<div id="top_page" class="navbar navbar-default">
+  {# This is used in mobile view  navbar-static-top accounts #}
+  <div class="navbar-header">
+    <a class="btn btn-default navbar-toggle collapsed" data-toggle="collapse" data-target=".account-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </a>
+  </div>
+  
+  <div class="navbar-collapse account-collapse collapse">
+    <div class="container-fluid">
+      <div class="row">
+	<div class="col-xs-8 col-sm-10 col-md-12 col-lg-10">
+	  
+	  <ul class="nav navbar-nav pull-right">
+	    <li> 
+	      <a  href="/catalogue/category/allimentation-generale_3/">
+		Ngazidja Boutique </a></li>
+	    
+	    <li><a href="/catalogue/category/credit-comores-telecoms_4/">
+		Anjouan Boutique </a></li>
+            
+	    <li><a  href="/catalogue/category/credit-telma-telecom_2/">
+		Crédits Télécoms </a></li>
+	    <li><a  href="/catalogue/category/moheli_10/">
+		Moheli Boutique</a></li>
+	    
+	    
+	    
+	    {% if user.is_authenticated %}
+            
+            <li>
+              {% if num_unread_notifications > 0 %}
+              {# If user has new notifications - we change account link to go to inbox #}
+              <a href="{% url 'customer:notifications-inbox' %}">
+		<i class="icon-user"></i>
+		{% trans "Account" %}
+		<span class="label label-important">{{ num_unread_notifications }}</span>
+              </a>
+              {% else %}
+              <a href="{% url 'customer:summary' %}"><i class="icon-user"></i> {% trans "Account" %}</a>
+              {% endif %}
+            </li>
+            {% if user.is_staff or perms.partner.dashboard_access %}
+            <li><a href="{% url 'dashboard:index' %}"><i class="icon-list-ul"></i>
+		{% trans "Dashboard" %}</a></li>
+            {% endif %}
+            <li><a id="logout_link" href="{% url 'customer:logout' %}"><i class="icon-signout"></i> {% trans "Logout" %}</a></li>
+            {% else %}
+            <li><a id="login_link" href="{% url 'customer:login' %}"><i class="icon-signin"></i> {% trans "Login or register" %}</a></li>
+            {% endif %}
+	  </ul>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>

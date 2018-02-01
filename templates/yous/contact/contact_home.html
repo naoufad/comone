@@ -1,0 +1,54 @@
+{% extends "yous/layout_2_col.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block navigation %}
+{% include "yous/tina/partials/nav_primary.html" %}
+{% endblock %}
+
+{% block header %}
+<h3 class="navbar navbar-inverse"> Alors comment nous contacter?</h3>
+{% endblock %}
+
+{% block column_left %}
+
+{% endblock %}
+
+{% block content %}
+<p>Tout d'abord, n'oubliez pas que vous avez la possibilité de suivre l'état de votre commande sur votre espace client rubrique,
+  <strong>historique commande</strong>. Vous pouvez aussi modifier vos donner ou avoir tout informations relatives à vos commandes. <br />
+</p>
+<p> Cependant, vous pouvez toujours nous contacter de différentes manières. <br /><br />
+  <h4 class="navbar navbar-inverse">Nous contacter par email :</h4>
+  L'adresse de pour contacter Comores En Ligne:
+  
+  <ul>
+    <li><strong>contact.comores.en.ligne@gmail.com</strong></li>
+  </ul>
+</p>
+<p> <h4 class="navbar navbar-inverse">Nous contacter par téléphone</h4>
+				       
+  Etant donnée que nous sommes des étudiants, nous restons joignable seulement le soir à partir de 18h jusqu'à 1h00 du matin.<br />
+  <ul>
+    <li><strong>Naoufad Saandi</strong>:         06 51 93 37 48</li>
+    <li><strong>Nirsoih Losri Ibrahima</strong>: 06 50 73 05 31</li>
+  </ul>
+</p>
+<p><h4 class="navbar navbar-inverse">Nous contacter par courrier postale:</h4>
+  L'adresse postale de Comores En Ligne
+  <ul>
+    <li>M. IBRAHIMA NIRSOIH LOSRI</li>
+    <li>45 RUE DE FONTAURY</li>
+    <li>87100 LIMOGES<li>
+  </ul>
+</p>
+<p><h4 class="navbar navbar-inverse">Nous contacter ou nous suivre sur facebook:</h5>
+<br />
+  Cliquer sur l'image facebook pour aller directement sur notre page
+  <a target="_blank" href="{% url 'contact:facebook' %}"><img src="{% static 'yous/image/facebook.png' %}" alt="facebook.fr/comoresEnLigne"></a>
+</p>
+<br />
+<p><br />
+  L'Equipe <strong>Comores En Ligne</strong> vous remercie de votre viste <p>
+{% endblock content %}
+

@@ -1,0 +1,108 @@
+{% extends "yous/accueil_2_layout.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load basket_tags %}
+{% load promotion_tags %}
+{% load category_tags %}
+{% load product_tags %}
+{% load i18n %}
+
+
+
+{% block navigation %}
+{% include "yous/tina/partials/nav_primary.html" %}
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+
+{% block header %}
+
+<div id="carousel-comoresEnligne" class="carousel slide" data-ride="carousel">
+  <!--data-ride=chargement de data defilant-->
+  <!-- Indicateurs -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-comoresEnligne" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-comoresEnligne" data-slide-to="1"></li>
+    <li data-target="#carousel-comoresEnligne" data-slide-to="2"></li>
+    <li data-target="#carousel-comoresEnligne" data-slide-to="3"></li>
+    <li data-target="#carousel-comoresEnligne" data-slide-to="4"></li>
+    <li data-target="#carousel-comoresEnligne" data-slide-to="5"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox">
+    <div class="item active" id ="slide1">
+      <a href="/catalogue/category/allimentation-generale_3">
+     <img src="{% static "yous/image/img/comores_volo.jpg" %}" alt=" Comores En Ligne"></a>
+      <div class="carousel-caption">
+        <p> Faites les courses de la famille aux Comores sur Internet</p>
+      </div>
+    </div>
+     
+    <div class="item" id="slide2">
+      <a href="/catalogue/category/credit-telma-telecom_2/">
+      <img src="{% static "yous/image/img/telma.jpg" %}" alt=" Comores En Ligne"></a>
+      <div class="carousel-caption">
+        <p>Transferez directement du crédit à lafamille aux Comores</p>
+      </div>
+    </div>
+    
+    <div class="item" id="slide2">
+      <a href="/catalogue/category/credit-comores-telecoms_4/">
+      <img src="{% static "yous/image/img/comores_telecom_Comores.jpg" %}" alt=" Comores En Ligne"></a>
+      <div class="carousel-caption">
+        <p>Transferez directement du crédit à la famille aux Comores</p>
+      </div>
+    </div>
+    
+    <div class="item" id="slide3">
+      <a href="/catalogue/category/allimentation-generale/produits-laitiers_6/">
+     <img src="{% static "yous/image/img/nido3.jpg" %}" alt=" Comores En Ligne"></a>
+      <div class="carousel-caption">
+        <p>Offrez du Nido à vos Proches </p>
+      </div>
+    </div>
+    <div class="item" id="slide4">
+      <a href="/catalogue/category/allimentation-generale/produits-laitiers_6/">
+      <img src="{% static "yous/image/img/gigoz1.jpg" %}" alt=" Comores En Ligne"></a>
+      <div class="carousel-caption">
+	<p>Améliorerz la qualité du lait des enfants aux Comores</p>
+      </div>
+    </div>
+    <div class="item" id="slide5">
+      <a href="/catalogue/category/allimentation-generale/riz-farine-sucre_5/" role="button">
+     <img src="{% static "yous/image/img/riz_basmati.jpg" %}" alt=" Comores En Ligne"></a>
+      <div class="carousel-caption">
+        Du Basmati de qualité pour la famille 
+      </div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  
+  <a class="left carousel-control" href="#carousel-comoresEnligne" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <span class="sr-only">Précédent</span>
+  </a>
+  <a class="right carousel-control" href="#comoresEnligne" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    <span class="sr-only">Suivant</span>
+  </a>
+  <div id="carousel-comoresEnligne" class="carousel slide" data-ride="carousel" data-interval="2000">
+  </div>
+</div>
+
+{% endblock %}
+
+{% block column_left %}
+
+
+{% endblock %}
+
+
+
+{% block content %}
+
+{% endblock content %}
+

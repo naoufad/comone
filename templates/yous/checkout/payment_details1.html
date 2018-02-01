@@ -1,0 +1,32 @@
+{% extends 'yous/checkout/payment_details2.html' %}
+{% load i18n %}
+
+{% block payment_details %}
+<div class="well">
+  <div class="sub-header">
+    <h3>PayPal </h3>
+  </div>
+  <p></p>
+  <div style="overflow:auto">
+    <a href="{% url 'paypal-direct-payment' %}" title="{% trans "Pay with PayPal" %}">
+     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png" alt="PayPal Logo">
+    </a>&nbsp;</div>
+</div>
+
+<div class="well">
+  <div class="sub-header">
+    <h3>{% trans "PayPal PayFlow Pro" %}</h3>
+  </div>
+  <form method="post" action="{% url 'checkout:preview' %}" class="form-stacked">
+    {% csrf_token %}
+    <h4>{% trans "Bankcard" %}</h4>
+    {% include "partials/form_fields.html" with form=bankcard_form %}
+    <h4>{% trans "Billing address" %}</h4>
+    {% include "partials/form_fields.html" with form=billing_address_form %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-large btn-primary">{% trans "Continue" %}</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

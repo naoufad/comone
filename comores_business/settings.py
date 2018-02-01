@@ -1,0 +1,398 @@
+"""
+Django settings for comores_business project.
+https://docs.djangoproject.com/en/1.11/ref/settings/
+"""
+
+import os
+import environ
+from decouple import config
+
+from oscar.defaults import *
+from oscar import get_core_apps
+from oscar import OSCAR_MAIN_TEMPLATE_DIR
+from django.utils.translation import ugettext_lazy as _
+
+
+####################### Environment variables 1  ###################
+
+location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), x)
+
+env = environ.Env()
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SECRET_KEY = config('SECRET_KEY')
+
+ROOT_URLCONF = 'comores_business.urls'
+
+DEBUG=True           
+#DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = ['165.227.37.239','.comores-en-ligne.com',
+                 '10.188.112.191','localhost',]
+
+
+WSGI_APPLICATION = 'comores_business.wsgi.application'
+
+
+############## Applications inslatés ##############################
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.flatpages',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    'compressor',
+    'widget_tweaks',
+    'debug_toolbar',
+    'paypal',
+    'localflavor',
+    'contact',
+ 
+]
+
+INSTALLED_APPS = INSTALLED_APPS + get_core_apps(
+    ['promotions', 'customer','address','catalogue','shipping',
+     'partner','basket','checkout','payment','order','search',
+     'dashboard','offer',])
+
+
+SITE_ID = 1
+
+############### Middlewere config ##########################
+
+MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oscar.apps.basket.middleware.BasketMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'django.middleware.common.BrokenLinkEmailsMiddleware'
+]
+
+
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [ os.path.join(BASE_DIR, 'templates'),
+                  OSCAR_MAIN_TEMPLATE_DIR],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+
+                'oscar.apps.search.context_processors.search_form',
+                'oscar.apps.promotions.context_processors.promotions',
+                'oscar.apps.checkout.context_processors.checkout',
+                'oscar.apps.customer.notifications.context_processors.notifications',
+                'oscar.core.context_processors.metadata',
+            ],
+            'debug': DEBUG,
+        },
+    },
+]
+
+
+############## Database et caches  configuration #################
+
+DATABASES = {
+    'default': {
+        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.environ.get('DATABASE_NAME', location('db.sqlite')),
+        'USER': os.environ.get('DATABASE_USER', None),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', None),
+        'HOST': os.environ.get('DATABASE_HOST', None),
+        'PORT': os.environ.get('DATABASE_PORT', None),
+        'ATOMIC_REQUESTS': True
+    }
+}
+
+#DATABASES = {
+ #   'default': {
+  #      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+   #     'NAME': 'naoufad_prod',
+    #    'USER': 'u_naoufad',
+     #   'PASSWORD': 'Youstina@@2015',
+      #  'HOST': 'localhost',
+       # 'PORT': '',
+#    }
+#}
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'yousti-naoufad',
+    }
+}
+
+
+################# Password validation ##############################
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+
+###################### add dashboard PayPal ########################
+
+OSCAR_DASHBOARD_NAVIGATION.append(
+    {
+        'label': _('PayPal'),
+        'icon': 'icon-globe',
+        'children': [
+            {
+                'label': _('PayFlow transactions'),
+                'url_name': 'paypal-payflow-list',
+            },
+            {
+                'label': _('Express transactions'),
+                'url_name': 'paypal-express-list',
+            },
+        ]
+})
+
+
+########################## PayPal settings ########################
+
+PAYPAL_CURRENCY='EUR'
+
+PAYPAL_SANDBOX_MODE = True 
+PAYPAL_CALLBACK_HTTPS = False 
+PAYPAL_API_VERSION = '119 '
+
+PAYPAL_CURRENCY = PAYPAL_PAYFLOW_CURRENCY = 'EUR' 
+PAYPAL_PAYFLOW_DASHBOARD_FORMS = True 
+
+PAYPAL_API_USERNAME = config('PAYPAL_API_USERNAME')
+PAYPAL_API_PASSWORD = config('PAYPAL_API_PASSWORD')
+PAYPAL_API_SIGNATURE = config('PAYPAL_API_SIGNATURE')
+
+
+#################### Internationalization ##########################
+
+LANGUAGE_CODE = 'fr-FR'
+
+TIME_ZONE = 'Europe/Paris'
+
+USE_I18N = True
+
+USE_L10N = True
+
+USE_TZ = True
+
+
+################## Configurations des staticfiles ###################
+
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, '../static')
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    os.path.join(PROJECT_ROOT, 'static'),
+]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+MEDIA_ROOT=os.path.join(BASE_DIR, 'MEDIA')
+MEDIA_URL='/media/'
+
+
+################# django-toolbar config ############################
+
+INTERNAL_IPS = ['165.227.37.239','10.188.160.161','127.0.0.1']
+
+
+
+#################### Paramettre oscar ##############################
+
+from django.core.urlresolvers import reverse_lazy
+
+OSCAR_SHOP_NAME = 'Comores En Ligne'
+OSCAR_SHOP_TAGLINE = ''
+OSCAR_HOMEPAGE = reverse_lazy('promotions:home')
+
+OSCAR_REQUIRED_ADDRESS_FIELDS = ('first_name', 'last_name', 'line1',
+                                 'line4', 'postcode', 'country')
+
+OSCAR_USE_LESS = False
+
+OSCAR_DEFAULT_CURRENCY = 'EUR'
+
+OSCAR_ALLOW_ANON_CHECKOUT = False
+
+OSCAR_INITIAL_ORDER_STATUS = 'En attente'
+OSCAR_INITIAL_LINE_STATUS = 'En attente'
+
+OSCAR_PROMOTIONS_ENABLED = True
+OSCAR_PRODUCT_SEARCH_HANDLER = None
+
+OSCAR_ORDER_STATUS_PIPELINE = {
+    'En attente': ('En cours de traitement', 'Annulé',),
+    'En cours de traitement': ('Traité', 'Annulé',),
+    'Annulé': (),
+}
+
+OSCAR_ORDER_STATUS_CASCADE = {
+    'Being processed': 'Being processed',
+    'Cancelled': 'Cancelled',
+    'Complete': 'Shipped',
+}
+
+#####################  Haystack - solr - Backend ####################
+
+AUTHENTICATION_BACKENDS = (
+    'oscar.apps.customer.auth_backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://127.0.0.1:8983/solr',
+        'INCLUDE_SPELLING': True,
+    },
+}
+
+
+
+################## Envoi d'email Backend #########################
+
+EMAIL_HOST =config('EMAIL_HOST')
+EMAIL_HOST_USER = 'postmaster@mg.comores-en-ligne.com'
+EMAIL_HOST_PASSWORD =config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+OSCAR_SEND_REGISTRATION_EMAIL = True
+OSCAR_FROM_EMAIL= 'naoufad@comores-en-ligne.com'
+SEND_BROKEN_LINK_EMAILS = True
+
+
+SERVER_EMAIL='danger@comores-en-ligne.com'
+
+ADMINS = (
+    ('Naoufad Saandi', 'sidiyoustina@gmail.com'),
+)
+
+EMAIL_SUBJECT_PREFIX = '[Comores En Ligne Error]'
+#EMAIL_BACKEND ='django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+MANAGERS = ADMINS
+
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+    
+}
+
+
+
+#################   Journalisation du système de fichier   #########
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(message)s',
+        },
+        'simple': {
+            'format': '[%(asctime)s] %(message)s'
+        },
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['console'],
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+    },
+    'loggers': {
+        'oscar': {
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'oscar.catalogue.import': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'oscar.alerts': {
+            'handlers': ['null'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+
+        # Django loggers
+        'django': {
+            'handlers': ['null'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
+
+        # Third party
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sorl.thumbnail': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+    }
+}
+

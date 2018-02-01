@@ -1,0 +1,12 @@
+# Packaging
+*.pyc
+__pycache__
+*.egg-info
+/dist/
+/build/
+/node_modules/
+db.sqlite3
+solr-4.7.2.tgz
+solr-4.7.2
+.env
+MEDIA

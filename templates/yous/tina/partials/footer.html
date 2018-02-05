@@ -12,21 +12,29 @@
     </h5>
 
    
-   <div class="navbar navbar-navbar">
+   <div class="navbar navbar-inverse ">
      <div class="container-fluid" >
        <div class="row">
 	 <ul class="col-xs-12 col-ms-12 col-md-3 col-lg-3">
 	     <li class="div1">Qui sommes nous?</li>
-	     <li>Des Jeunes comoriens</li>
-	     <li>Sécurité et conformités</li>
-	     <li>Nos partenaires</li>
-	     <li>Mentions légales</li>
+	     <li><a href="{% url 'contact:nous' %}">
+		 Des Jeunes comoriens</a></li>
+	     <li><a href="{% url 'contact:partenaires' %}">
+		 Nos partenaires</a></li>
+	     <li><a href="{% url 'contact:legales' %}">
+		 Mentions légales</a></li>
+	     <li><a href="{% url 'contact:cg' %}">
+		 Conditions générales</a></li>
 	   </ul>
 	   <ul  class="col-xs-12 col-ms-12 col-md-3 col-lg-3">
-	     <li class="div1">Nos services  pour les Comores</li>
-	     <li>Transfert de crédit Telma </li>
-	     <li>Transfert de crédit télécoms</li>
-	     <li>Achat produits allimentaires</li>
+	     <li class="div1"> Nos prouits et services  pour les Comores</li>
+	     
+	     <li><a href="{% url 'contact:batiment' %}">
+		 Achat de matérieles de constructions</a> </li>
+	     <li><a href="{% url 'contact:alliment' %}">
+		 Achat de produits allimentaires</a></li>
+	     <li><a href="{% url 'contact:riz' %}">
+		 Achat de Riz en Gros pour les mariages</a></li>
 	   </ul>
 	   <ul  class="col-xs-12 col-ms-12 col-md-3 col-lg-3">
 	     <li class="div1">Besoins d'aide?</li>
@@ -42,21 +50,24 @@
 	     <li>France</li>
 	     <li>contact.comores.en.ligne@gmail.com</li>
 	   </ul>
-	 </div>
+       </div>
      </div>
    </div>
-
-     <br /> <br />
-    
-    <ul class="footer_links inline">
-      
-           <p>
-	<a href="{% url 'promotions:home' %}">Accueil</a> |<a href="{% url 'promotions:home' %}">A propos de nous</a>| <a href="{% url 'contact:contact' %}"> Contactez nous<a/>|
-	  <a href="{% url 'promotions:home' %}">Mentions Legales</a> |<a href="{% url 'promotions:home' %}">Propriété intellectuel</a> |
-	  <a href="{% url 'promotions:home' %}">Conditions générales</a> <br /> <br />
-	  <div class="navbar navbar-inverse"> &copy Copyright {% now "Y" %} &middot; Comores En Ligne &middot; Tout droit resérvés
-	  </div>
-	  
+   
+   <br /> <br />
+   
+   <ul class="footer_links inline">
+     
+     <p>
+       <a href="{% url 'promotions:home' %}">Accueil</a> |<a href="{% url 'contact:nous' %}">A propos de nous</a>| <a href="{% url 'contact:contact' %}"> Contactez nous<a/>|
+	 <a href="{% url 'contact:legales' %}">Mentions Legales</a> |<a href="{% url 'contact:cg' %}">Conditions Générales</a> |
+	 <a href="{% url 'contact:services' %}">Nos produis & services</a> <br /> <br />
+	     
+	 <div class="navbar navbar-inverse"> &copy Copyright {% now "Y" %} &middot; Comores En Ligne &middot; Tout droit resérvés
+	   
+         </div>
+	 
+	 
       </p>
     
       

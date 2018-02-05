@@ -108,9 +108,16 @@ html {
 
 /* Le pied de page */
 
-footer .pied{
-    backgroung-color:red;
+
+
+
+
+.navbar-inverse a
+{
+    color:green;
+    font-size:1em;
 }
+
 footer p
 {
     font-size: 1em;
@@ -124,6 +131,7 @@ footer p a
 }
 
 footer p a:hover
+	       
 {
     font-size: 1.5em;
     padding: 4px 10px;

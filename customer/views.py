@@ -552,6 +552,8 @@ class OrderDetailView(PageTitleMixin, PostActionMixin, generic.DetailView):
                 _("It is not possible to re-order order %(number)s "
                   "as none of its lines are available to purchase") %
                 {'number': order.number})
+     
+            
 
 
 class OrderLineView(PostActionMixin, generic.DetailView):

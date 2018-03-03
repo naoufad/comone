@@ -1,4 +1,4 @@
-{% extends "checkout/preview.html" %}
+{% extends "yous/checkout/preview2.html" %}
 {% load currency_filters %}
 {% load i18n %}
 {% load thumbnail %}
@@ -9,30 +9,29 @@
 {% block order_contents_actions %}{% endblock %}
 
 {% block payment_method %}
-    <div class="col-md-6">
-        <div class="sub-header">
-            <h2>Payement par PayPal</h2>
-        </div>
-        <div class="well well-success">
-            <h4>{% trans "PayPal" %}</h4>
-            <p>
-                {% blocktrans with amt=paypal_amount|currency email=paypal_user_email %}
-                {{ amt }} seront prélevés sur votre compte PayPal {{ email }} Après votre confirmation.  <br />
-		Verifiez les détails de votre commande en bas, puis confirmez :)    
-                {% endblocktrans %}
-            </p>
-        </div>
-    </div>
+<div class="col-md-6">
+  <div class="sub-header">
+    <h2>Payement par PayPal</h2>
+  </div>
+  <div class="well well-success">
+    <h4>{% trans "PayPal" %}</h4>
+    <p>
+      {% blocktrans with amt=paypal_amount|currency email=paypal_user_email %}
+      Maintenant, verifiez bien les détails de votre commande. Si tout est bien pour vous, alors confirmer le paiement de {{ amt }} en bas de cette page.
+      {% endblocktrans %}
+    </p>
+  </div>
+</div>
 {% endblock %}
 
 {# Note, we submit to a different URL for placing an Express order #}
 {% block place_order %}
-    <form method="post" action="{% url 'paypal-place-order' basket.id %}">
-        {% csrf_token %}
-        <input type="hidden" name="payer_id" value="{{ payer_id }}" />
-        <input type="hidden" name="token" value="{{ token }}" />
-        <div class="form-actions">
-            <input id='place-order' type="submit" value="Confirmation de la commande. La famille et l'équipe Comores En Ligne vous remercie :)" class="pull-right btn btn-primary btn-large js-disable-on-click" />
-        </div>
-    </form>
+<form method="post" action="{% url 'paypal-place-order' basket.id %}">
+  {% csrf_token %}
+  <input type="hidden" name="payer_id" value="{{ payer_id }}" />
+  <input type="hidden" name="token" value="{{ token }}" />
+  <div class="form-actions">
+    <input id='place-order' type="submit" value='Confirmation de votre commande. L'équipe Comores En Ligne vous remercie:)' class="pull-right btn btn-primary btn-large js-disable-on-click" />
+  </div>
+</form>
 {% endblock place_order %}

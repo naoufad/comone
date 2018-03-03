@@ -106,6 +106,7 @@ class RedirectView(CheckoutSessionMixin, RedirectView):
             if basket.is_shipping_required():
                 # Only check for shipping details if required.
                 shipping_addr = self.get_shipping_address(basket)
+                
                 if not shipping_addr:
                     raise MissingShippingAddressException()
 
@@ -235,7 +236,6 @@ class SuccessResponseView(PaymentDetailsView):
 
     def get_context_data(self, **kwargs):
         ctx = super(SuccessResponseView, self).get_context_data(**kwargs)
-
         if not hasattr(self, 'payer_id'):
             return ctx
 
@@ -324,12 +324,16 @@ class SuccessResponseView(PaymentDetailsView):
         Return a created shipping address instance, created using
         the data returned by PayPal.
         """
+        # nla - To pull over the phone number/notes from the entered address
+
+        old_shipping = super( SuccessResponseView, self).get_shipping_address( basket )
         # Determine names - PayPal uses a single field
         ship_to_name = self.txn.value('PAYMENTREQUEST_0_SHIPTONAME')
         if ship_to_name is None:
             return None
         first_name = last_name = ''
         parts = ship_to_name.split()
+      
         if len(parts) == 1:
             last_name = ship_to_name
         elif len(parts) > 1:
@@ -343,6 +347,11 @@ class SuccessResponseView(PaymentDetailsView):
             line4=self.txn.value('PAYMENTREQUEST_0_SHIPTOCITY', default=""),
             state=self.txn.value('PAYMENTREQUEST_0_SHIPTOSTATE', default=""),
             postcode=self.txn.value('PAYMENTREQUEST_0_SHIPTOZIP', default=""),
+
+            # recuperer le phone number et notes via paypal
+            phone_number=old_shipping and old_shipping.phone_number or "",
+            notes=old_shipping and old_shipping.notes or "",
+            
             country=Country.objects.get(iso_3166_1_a2=self.txn.value('PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE'))
         )
 

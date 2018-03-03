@@ -25,19 +25,25 @@ ProductAlert = get_model('customer', 'ProductAlert')
 User = get_user_model()
 
 
+"""
 def generate_username():
     # Python 3 uses ascii_letters. If not available, fallback to letters
+
+    
     try:
         letters = string.ascii_letters
     except AttributeError:
         letters = string.letters
     uname = ''.join([random.choice(letters + string.digits + '_')
                      for i in range(30)])
+    
     try:
         User.objects.get(username=uname)
         return generate_username()
     except User.DoesNotExist:
+
         return uname
+"""
 
 
 class PasswordResetForm(auth_forms.PasswordResetForm):
@@ -191,7 +197,7 @@ class EmailUserCreationForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password1'])
 
         if 'username' in [f.name for f in User._meta.fields]:
-            user.username = generate_username()
+            user.username =user.first_name+' '+user.last_name#generate_username()
         if commit:
             user.save()
         return user
@@ -439,3 +445,7 @@ class ProductAlertForm(forms.ModelForm):
     class Meta:
         model = ProductAlert
         fields = ['email']
+
+
+
+

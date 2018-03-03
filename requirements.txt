@@ -16,7 +16,10 @@ django-localflavor==1.6.2
 django-debug-toolbar==1.9.1
 django-extensions==1.9.8		
 django-environ==0.4.4
+django-mathfilters==0.4.0
+django-oscar-accounts==0.3
 
-
+pyopenssl==17.5.0
+ndg-httpsclient==0.4.4
 
 

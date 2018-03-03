@@ -15,13 +15,14 @@ from oscar.views import handler403, handler404, handler500
 #from search.sitemaps import base_sitemaps
 from paypal.payflow.dashboard.app import application as payflow
 from paypal.express.dashboard.app import application as express_dashboard
-
+from oscar_accounts.dashboard.app import application as accounts_app
 
 urlpatterns = [
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include(application.urls)),
     url(r'^contact/',include('contact.urls')),
+    url(r'^dashboard/accounts/', accounts_app.urls),
 ]
 
 

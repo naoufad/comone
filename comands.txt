@@ -1,0 +1,39 @@
+supervisor
+
+sudo supervisorctl reread: to read the news files
+sudo supervisorctl update: to update
+sudo supervisorctl status comores-en-lign: to get status app
+sudo supervisorctl restart comores-...: to restart app
+
+
+
+nginx
+/etc/nginx/nginx.conf
+/etc/nginx/sites-available/
+
+sudo systemctl stop nginx
+sudo systemctl start nginx
+sudo systemctl restart nginx
+sudo systemctl reload nginx
+sudo systemctl disable nginx
+sudo systemctl enable nginx
+
+########## Pour renouveler le ssl avec mes domain nams #############
+
+ sudo certbot --authenticator standalone --installer nginx -d comores-en-ligne.com -d www.comores-en-ligne.com -d mail.comores-en-ligne.com --pre-hook "service nginx stop" --post-hook "service nginx start"
+
+########## log postfix #############
+  tail -f /var/log/mail.log: affiche les derniers ligne du jouranl avec sortie
+
+
+
+########## firewall ufw ################
+
+setup ufw firewall
+
+sudo ufw enable: to activate ufw
+sudo ufw deny http: banir http
+sudo ufw delete allow http
+sudo ufw status verbose: staus en details des firewall
+sudo ufw disable
+sudo ufw reset

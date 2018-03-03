@@ -1,5 +1,5 @@
 from decimal import Decimal as D
-
+from order.models import ShippingAddress
 from django.utils.translation import ugettext_lazy as _
 
 from oscar.core import prices
@@ -62,6 +62,10 @@ class Free(Base):
             excl_tax=D('0.00'), tax=D('0.00'))
 
 
+
+        
+        
+        
 class NoShippingRequired(Free):
     """
     This is a special shipping method that indicates that no shipping is
@@ -69,7 +73,7 @@ class NoShippingRequired(Free):
     """
     code = 'no-shipping-required'
     name = _('Crédit de communication')
-    description = "Pas besoin de livraison"
+    description = "Le crédit sera disponible dans 30 min au maximum"
 
 
 class FixedPrice(Base):
@@ -97,6 +101,93 @@ class FixedPrice(Base):
             currency=basket.currency,
             excl_tax=self.charge_excl_tax,
             incl_tax=self.charge_incl_tax)
+
+
+class Moroni(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Moroni Ville')
+    description = "Livré à domicile  -  Moroni en 24h ouvrées"
+
+    charge_excl_tax = D('1.50')
+    charge_incl_tax =D('1.50')
+
+class Bambao(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Bambao Ngazidja')
+    description = "Livré à domicile  -  Region Bambao Ngazidja en 48h"
+
+    charge_excl_tax = D('2.15')
+    charge_incl_tax =D('2.15')
+
+class BadjiniOuest(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Badjini Ouest')
+    description = "Livré à domicile  - Region Badjini Ouest en 48h ouvrées"
+
+    charge_excl_tax = D('4.25')
+    charge_incl_tax =D('4.25')
+
+
+class BadjiniEst(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Badjini EST')
+    description = "Livré à domicile  - Badjini EST en 48h ouvrées"
+
+    charge_excl_tax = D('4.75')
+    charge_incl_tax =D('4.75')
+
+
+class Hambou(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Hambou')
+    description = "Livré à domicile  - Region Hambou en 48h ouvrées"
+
+    charge_excl_tax = D('3.00')
+    charge_incl_tax =D('3.00')
+
+class Hamahamet(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Hamahamet')
+    description = "Livré à domicile  - Hamahamet en 48h ouvrées"
+
+    charge_excl_tax = D('4.25')
+    charge_incl_tax =D('4.25')
+
+class OichiliNgazidja(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Oichili')
+    description = "Livré à domicile  - Region Oichili en 48h ouvrées"
+
+    charge_excl_tax = D('4.25')
+    charge_incl_tax =D('4.25')
+
+class Mitsamihuli(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Mitsamihuli')
+    description = "Livré à domicile  - Region Mitsamihuli en 48h ouvrées"
+
+    charge_excl_tax = D('4.10')
+    charge_incl_tax =D('4.10')
+
+
+class Itsandra(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Itsandra')
+    description = "Livré à domicile  -Region Itsandra en 48h ouvrées"
+
+    charge_excl_tax =D('2.75')
+    charge_incl_tax =D('2.75')
+
+class MutsamuduAnjouan(FixedPrice):
+    code = 'fixed-price-shipping'
+    name = _('Livraison à Domicile - Mutsamudu - Ouani')
+    description = "Livré à domicile  - region Mutsamudu - Ouani en 24h ouvrées"
+
+    charge_excl_tax = D('1.50')
+    charge_incl_tax =D('1.50')
+
+
+
 
 
 class OfferDiscount(Base):

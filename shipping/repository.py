@@ -2,8 +2,9 @@ from decimal import Decimal as D
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
-
+from order.models import ShippingAddress
 from shipping import methods as shipping_methods
+from shipping import models #import WeightBased
 
 
 class Repository(object):
@@ -15,9 +16,12 @@ class Repository(object):
     # We default to just free shipping. Customise this class and override this
     # property to add your own shipping methods. This should be a list of
     # instantiated shipping methods.
+    weightbased_set = models.WeightBased.objects.all()
     methods = (shipping_methods.Free(),
-               shipping_methods.FixedPrice(),
-               shipping_methods.NoShippingRequired(),)
+               shipping_methods.NoShippingRequired(),
+                             
+    )+tuple(weightbased_set)
+    
 
     # API
 
@@ -43,11 +47,15 @@ class Repository(object):
         Return a 'default' shipping method to show on the basket page to give
         the customer an indication of what their order will cost.
         """
+
+       
         shipping_methods = self.get_shipping_methods(
             basket, shipping_addr=shipping_addr, **kwargs)
         if len(shipping_methods) == 0:
             raise ImproperlyConfigured(
                 _("You need to define some shipping methods"))
+        
+
 
         # Assume first returned method is default
         return shipping_methods[0]
@@ -60,6 +68,7 @@ class Repository(object):
         Return a list of all applicable shipping method instances for a given
         basket, address etc. This method is intended to be overridden.
         """
+                
         return self.methods
 
     def apply_shipping_offers(self, basket, methods):

@@ -1,32 +1,172 @@
 {% extends 'yous/checkout/payment_details2.html' %}
+{% load currency_filters %}
 {% load i18n %}
 
 {% block payment_details %}
-<div class="well">
-  <div class="sub-header">
-    <h3>PayPal </h3>
-  </div>
-  <p></p>
-  <div style="overflow:auto">
-    <a href="{% url 'paypal-direct-payment' %}" title="{% trans "Pay with PayPal" %}">
-     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_200x51.png" alt="PayPal Logo">
-    </a>&nbsp;</div>
-</div>
 
 <div class="well">
-  <div class="sub-header">
-    <h3>{% trans "PayPal PayFlow Pro" %}</h3>
-  </div>
-  <form method="post" action="{% url 'checkout:preview' %}" class="form-stacked">
+  <div class="row">
+    
+    <div class="sub-header col-md-4">
+      
+      
+      <p class="navbar navbar-inverse ">
+	<strong>Payez avec ou sans compte PayPal</strong> </p>
+      
+      
+      <p style="overflow:auto">
+	<a href="{% url 'paypal-direct-payment' %}" title="{% trans "Pay with PayPal" %}">
+	  
+		
+	  <img  src="https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg" border="0" alt="PayPal Acceptance Mark" />
+	</a>&nbsp;
+	
+
+
+      </p>
+    </div>  
+
+  
+  
+    <div class="sub-header col-sm-8">
+  
+      <p class="navbar navbar-inverse col-md-8">
+	<strong>Payez avec votre compte Comores En Ligne</strong></p>
+      
+      
+      {% if not allocation_form %}
+      {# 1. Initial load of page - show form to look up account if they are not blocked #}
+      {% if is_blocked %}
+      <p>{% trans "Vous avez fait plus de de 3 tentatives. Votre compte est bloqué pendant 30 min" %}</p>
+      {% else %}
+      {% if user_accounts %}
+      <p class="col-md-8"><strong>Payez avec votre Compte Comores En Ligne en 3 Etapes</strong></p>
+      <p class="col-md-8">Etape 1: Cocher votre compte et confirmer votre numéro de compte. Etape 2: Confirmer le montant de la commande. Etape 3: Confirmer le prélevement et continuer<br />
+	<br /><strong>Etape 1</strong>
+      <p>
+	<form action="." method="post">
+	  {% csrf_token %}
+	  <table class="table">
+	    <thead>
+	      <tr>
+		<th></th>
+		<th>Compte</th>
+		<th>Solde</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	      {% for account in user_accounts %}
+	      <tr>
+	    <td><input type="radio" name="code" value="{{ account.code }}"></td>
+	    <td>{{ account.name }}</td>
+	    <td>{{ account.balance|currency }}</td>
+	  </tr>
+	  {% endfor %}
+	</tbody>
+      </table>
+    </form>
+    {% endif %}
+    
+    <h3></h3>
+    <form action="." method="post">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="select_account" />
+      {% include 'partials/form_fields.html' with form=account_form %}
+      <button  type="submit" class="btn btn-primary">Je confirme mon numéro de compte et je passe à l'<strong>Etape 2</strong></button>
+    </form>
+    {% endif %}
+    {% else %}
+    {# 2. An account has been found - choose allocation #}
+    {% with account=allocation_form.account %}
+    <strong class="col-md-8">Etape 2: Je confirme le montant de la commande</strong>
+    <h3 class="col-md-8">Compte</h3>
+    <table class="table col-md-8">
+      <tr>
+	<th class="col-md-8">Nom</th>
+	<td class="col-md-8">{{ account.name }}</td>
+      </tr >
+      {% if account.description %}
+      <tr>
+	<th>{% trans "Description" %}</th>
+	<td>{{ account.description }}</td>
+      </tr>
+      {% endif %}
+      {% if account.end_date %}
+      <tr>
+	<th>Date d'expiration du compte</th>
+	<td>{{ account.end_date }}</td>
+      </tr>
+      {% endif %}
+      <tr>
+	<th>Solde </th>
+	<td>{{ account.balance|currency }}</td>
+      </tr>
+    </table>
+    {% endwith %}
+    <h3>{#% trans "Choose allocation" %#}</h3>
+  <p class="col-md-8">Montant Total de la commande
+    {% if order_total.is_tax_known %}
+    {{ order_total.incl_tax|currency }}
+    {% else %}
+    {{ order_total.excl_tax|currency }}
+    {% endif %}.</p>
+  
+  <p>{#% trans "The maximum allocation from this account is" %#} {#{ allocation_form.max_allocation|currency }#}</p>
+  <form action="." method="post">
     {% csrf_token %}
-    <h4>{% trans "Bankcard" %}</h4>
-    {% include "partials/form_fields.html" with form=bankcard_form %}
-    <h4>{% trans "Billing address" %}</h4>
-    {% include "partials/form_fields.html" with form=billing_address_form %}
-    <div class="form-actions">
-      <button type="submit" class="btn btn-large btn-primary">{% trans "Continue" %}</button>
+    {# Include account form hidden #}
+    <div style="display:none">
+      {{ account_form.as_p }}
     </div>
+    <input type="hidden" name="action" value="allocate" />
+    {% include 'partials/form_fields.html' with form=allocation_form %}
+    <button type="submit" class="btn btn-primary btn-large">Je confirme le montant de la commande et je passe à l'<strong>Etape 3</strong></button>{% trans "or" %}
+    <a href="{% url 'checkout:payment-details' %}">{% trans "cancel" %}</a>.
   </form>
+  {% endif %}
+  
+  {% if account_allocations %}
+  <br />
+  <strong>Etape 3</strong>
+  <br />
+  <p <strong>Si en bas de cette page, il y a un &laquoMontant restant à Payer&raquo</strong>, alors recommencer l'étape 1 ci-dessus.<br />
+    Sinon, cliquez sur confirmer le prélèvement et continuer</p>
+  <form action="." method="post">
+    {% csrf_token %}
+    <input type="hidden" name="action" value="remove_allocation" />
+    <table id="" class="table">
+      <thead>
+	<tr>
+	  <th>Numéro de Compte</th>
+	  <th>Montant à prélever</th>
+	  <th></th>
+	</tr>
+      </thead>
+      <tbody>
+	{% for code, amount in account_allocations.items %}
+	<tr>
+	  <td>{{ code }}</td>
+	  <td>{{ amount|currency }}</td>
+	  <td>
+	    <!--- <button type="submit" class="btn" name="remove_{{ code }}">Supprimer</button>-->
+	  </td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+  </form>
+  {% endif %}
+  
+  
+  {% if to_allocate == 0 %}
+  <a href="{% url 'checkout:preview' %}" class="btn btn-primary btn-large">Confirmer le prélèvement et continuer</a>
+  {% else %}
+  <p>{% trans "Order total" %}: {% if order_total.is_tax_known %}{{ order_total.incl_tax|currency }}{% else %}{{ order_total.excl_tax|currency }}{% endif %}.<br />
+    <br />Montant restant à Payer : 
+    {{ to_allocate|currency }}</p>
+  {% endif %}
+  
+  {% endblock %}
+  
 </div>
-
-{% endblock %}
+</div>

@@ -5,10 +5,16 @@
 {% block payment_method %}
 <div class="span6">
   <div class="sub-header">
-    <h2>{% trans "Payment" %}</h2>
+    <h2>Paiement</h2>
   </div>
   <div class="well well-success">
-    <p>{% blocktrans with amount=order_total.incl_tax|currency %}<strong>{{ amount }}</strong> will be debited from your bankcard.{% endblocktrans %}</p>
+    <p>Paiement avec votre Compte Comores En Ligne</p>
+    <ul>
+      {% for code, amount in account_allocations.items %}
+      <li>Cliquer &laquoPasser la commande&raquo en bas et {{ amount|currency }} Seront prélevé sur votre compte numéro {{ code }} </li>
+      {% endfor %}
+    </ul>
+    
     <div class="alert-actions">
       <a href="{% url 'checkout:payment-details' %}" class="btn">{% trans "Change payment details" %}</a>
     </div>

@@ -6,12 +6,14 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import environ
 from decouple import config
+from decimal import Decimal as D
 
 from oscar.defaults import *
 from oscar import get_core_apps
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
 from django.utils.translation import ugettext_lazy as _
-
+from oscar_accounts import TEMPLATE_DIR as ACCOUNTS_TEMPLATE_DIR
+    
 
 ####################### Environment variables 1  ###################
 
@@ -50,8 +52,10 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'debug_toolbar',
     'paypal',
+    'oscar_accounts',
     'localflavor',
     'contact',
+    'mathfilters'
  
 ]
 
@@ -88,15 +92,16 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [ os.path.join(BASE_DIR, 'templates'),
-                  OSCAR_MAIN_TEMPLATE_DIR],
+                  OSCAR_MAIN_TEMPLATE_DIR,ACCOUNTS_TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
+            
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
+               
                 'oscar.apps.search.context_processors.search_form',
                 'oscar.apps.promotions.context_processors.promotions',
                 'oscar.apps.checkout.context_processors.checkout',
@@ -122,18 +127,18 @@ DATABASES = {
         'ATOMIC_REQUESTS': True
     }
 }
-
-#DATABASES = {
- #   'default': {
-  #      'ENGINE': 'django.db.backends.postgresql_psycopg2',
-   #     'NAME': 'naoufad_prod',
-    #    'USER': 'u_naoufad',
-     #   'PASSWORD': 'Youstina@@2015',
-      #  'HOST': 'localhost',
-       # 'PORT': '',
-#    }
-#}
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'naoufad_dev', # db name
+        'USER': 'naoufad_db',  # user role
+        'PASSWORD': 'Youstina@@2015',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+"""
 
 CACHES = {
     'default': {
@@ -161,7 +166,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-###################### add dashboard PayPal ########################
+###############    dashboard Shipping accounts and PayPal #########
+
+OSCAR_DASHBOARD_NAVIGATION += [
+    {
+        'label': _('Shipping'),
+        'children': [
+            {
+                'label': 'Shipping',
+                'url_name': 'dashboard:shipping-method-list',
+            },
+        ]
+    },
+]
 
 OSCAR_DASHBOARD_NAVIGATION.append(
     {
@@ -180,6 +197,35 @@ OSCAR_DASHBOARD_NAVIGATION.append(
 })
 
 
+OSCAR_DASHBOARD_NAVIGATION.append(
+    {
+        'label': 'Comptes',
+        'icon': 'icon-globe',
+        'children': [
+            {
+                'label': 'Comptes',
+                'url_name': 'accounts-list',
+            },
+            {
+                'label': 'Transfers',
+                'url_name': 'transfers-list',
+            },
+            {
+                'label': 'Rapport de revenu différés',
+                'url_name': 'report-deferred-income',
+            },
+            {
+                'label': 'Rapport Bénéfice/Perte',
+                'url_name': 'report-profit-loss',
+            },
+        ]
+    })
+
+ACCOUNTS_UNIT_NAME = 'Comiles'#'Giftcard'
+ACCOUNTS_UNIT_NAME_PLURAL ='Comiles'# 'Giftcards'
+ACCOUNTS_MIN_LOAD_VALUE = D('30.00')
+ACCOUNTS_MAX_ACCOUNT_VALUE = D('1000.00')
+
 ########################## PayPal settings ########################
 
 PAYPAL_CURRENCY='EUR'
@@ -187,6 +233,10 @@ PAYPAL_CURRENCY='EUR'
 PAYPAL_SANDBOX_MODE = True 
 PAYPAL_CALLBACK_HTTPS = False 
 PAYPAL_API_VERSION = '119 '
+PAYPAL_ALLOW_NOTE=False
+PAYPAL_BRAND_NAME='Comores En Ligne'
+PAYPAL_CUSTOMER_SERVICES_NUMBER='0651933748'
+
 
 PAYPAL_CURRENCY = PAYPAL_PAYFLOW_CURRENCY = 'EUR' 
 PAYPAL_PAYFLOW_DASHBOARD_FORMS = True 
@@ -259,14 +309,13 @@ OSCAR_ORDER_STATUS_PIPELINE = {
     'En attente': ('En cours de traitement', 'Annulé',),
     'En cours de traitement': ('Traité', 'Annulé',),
     'Annulé': (),
+    
 }
-
 OSCAR_ORDER_STATUS_CASCADE = {
     'Being processed': 'Being processed',
     'Cancelled': 'Cancelled',
     'Complete': 'Shipped',
 }
-
 #####################  Haystack - solr - Backend ####################
 
 AUTHENTICATION_BACKENDS = (
@@ -361,6 +410,19 @@ LOGGING = {
             'level': 'INFO',
             'propagate': False,
         },
+        'oscar.checkout': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+
+        # Accounts
+        
+        'accounts': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'DEBUG',
+        },
 
         # Django loggers
         'django': {
@@ -393,6 +455,7 @@ LOGGING = {
             'propagate': True,
             'level': 'INFO',
         },
+        
     }
 }
 

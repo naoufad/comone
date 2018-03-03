@@ -38,6 +38,12 @@ html {
 }
 
 
+IMG.displayed {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}    
+
 .logo2 /* pour le logo */
 {
     position : fixed;

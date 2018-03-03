@@ -5,7 +5,7 @@ will be processed shortly.{% endblocktrans %}
 
 {% trans 'Your order contains:' %}
 
-{% for line in order.lines.all %} * {{ line.title }} - {%  trans 'quantity:' %} {{ line.quantity }} - {% trans 'price:' %} {{ line.line_price_incl_tax|currency:order.currency }}
+{% for line in order.lines.all %} * {{ line.title }}, - {%  trans 'quantity:' %} {{ line.quantity }}, - {% trans 'price:' %} {{ line.line_price_incl_tax|currency:order.currency }}, - Magasin du Vendeur{{ line.partner }}
 {% endfor %}
 {% trans 'Basket total:' %} {{ order.basket_total_incl_tax|currency:order.currency }}
 {% trans 'Shipping:' %} {{ order.shipping_incl_tax|currency:order.currency }}
@@ -15,6 +15,8 @@ will be processed shortly.{% endblocktrans %}
 
 {% for field in order.shipping_address.active_address_fields %}  {{ field }}
 {% endfor %}
+
+<p>N'oubliez pas de dire à la famille aux Comores d'aller recuperer votre commande avec leur carte d'identité et  le numéro de commande chez le magasin vendeur s'il vous plait </p>
 
 {% if status_url %}
 {% blocktrans %}You can view the status of this order at the below URL:

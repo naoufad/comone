@@ -1,0 +1,51 @@
+Quelques outils à connaître absolument :
+• pg_lsclusters : liste des clusters
+• pg_createcluster : crée un cluster de bases
+• pg_ctlcluster : contrôle des cluster (arrêt/démarrage)
+
+ps -ef | grep postgres | grep -v grep: connaitre l'emplacement des fichier
+
+passwd postgres: pour changer le mot de passe de postgres
+su - postgres: activer le compte postgres
+psql:après activation, on peu interagir avec la database avec invite de commande
+
+sudo -u postgres psql: accès à invite postgres sans changement de compte
+
+Create new db, role,user qui porte le même nom
+
+createuser --interactif: postgres, on invite un shell interactif pour creer user
+sudo -u postgres createuser --interactif: sans compte postgres
+
+Create new db, role,user qui porte nom different
+
+On creer un user avec: sudo adduser naouf
+On lui donne les droit sudo: usermod -aG sudo naouf
+
+
+########### DB user ###########
+
+sudo -u postgres psql: invite pour postgres
+
+CREATE DATABASE naoufad_dev; :create DB
+CREATE USER naoufad_db WITH PASSWORD 'Youstina@@2015'; :user to connect DB
+ALTER ROLE naoufad_db SET client_encoding TO 'utf8';
+ALTER ROLE naoufad_db SET default_transaction_isolation TO 'read committed';
+isole les transaction non validé
+ALTER ROLE naoufad_db SET timezone TO 'UTC'; utilise le UTC timezone
+GRANT ALL PRIVILEGES ON DATABASE naoufad_dev TO naoufad_db;
+donner les droit d'accès à l'utilisateur
+
+sudo adduser naoufad_db: creér user system
+su - naoufad_db: connecte user system
+psql naoufad_dev: accès a l'invie de la db naoufad_dev
+
+
+################################# commande de base ################
+
+\conninfo: info sur la base où on est
+\connect nomdb: se connecter à nomdb
+\dt : voir les tables de nomdb
+q: pour quitter 
+drop database nomdb; suprimer nomdb
+
+\d table_name: decrit une table
